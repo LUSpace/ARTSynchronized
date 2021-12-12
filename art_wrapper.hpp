@@ -21,6 +21,7 @@ public:
   art_wrapper() { my_tree = new ART_OLC::Tree(loadKey); }
 
   void bulk_load(const V bulk_arr[], int num) {
+    std::cout << "start get thread info" << std::endl;
     auto t = my_tree->getThreadInfo();
     for (int i = 0; i < num; ++i) {
       std::cout << "insert " << i << "key: ";
