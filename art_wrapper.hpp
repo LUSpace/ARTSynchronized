@@ -26,7 +26,7 @@ public:
       Key key_;
       key_.set(bulk_arr[i].first->key, bulk_arr[i].first->length);
       auto val =
-          new std::pair<const char *, P>(bulk_arr[i].first, bulk_arr[i].second);
+          new std::pair<string_key *, P>(bulk_arr[i].first, bulk_arr[i].second);
       my_tree->insert(key_, val, t);
     }
   }
@@ -36,7 +36,7 @@ public:
     if constexpr (std::is_pointer_v<T>) {
       Key key_;
       key_.set(key->key, key->length);
-      auto val = new std::pair<const char *, P>(key, payload);
+      auto val = new std::pair<string_key *, P>(key, payload);
       my_tree->insert(key_, val, t);
       return true;
     } else {
