@@ -27,7 +27,7 @@ public:
       key_.set(bulk_arr[i].first->key, bulk_arr[i].first->length);
       auto val =
           new std::pair<string_key *, P>(bulk_arr[i].first, bulk_arr[i].second);
-      my_tree->insert(key_, val, t);
+      my_tree->insert(key_, reinterpret_cast<TID>(val), t);
     }
   }
 
@@ -37,7 +37,7 @@ public:
       Key key_;
       key_.set(key->key, key->length);
       auto val = new std::pair<string_key *, P>(key, payload);
-      my_tree->insert(key_, val, t);
+      my_tree->insert(key_, reinterpret_cast<TID>(val), t);
       return true;
     } else {
       // LOG_FATAL("The key must be string key in HOT!");
