@@ -23,5 +23,5 @@ set(SOURCE_FILES example.cpp)
 add_executable(example ${SOURCE_FILES})
 target_link_libraries(example ARTSynchronized)
 
-add_library(art_wrapper SHARED art_wrapper.cpp)
+add_library(art_wrapper SHARED art_wrapper.cpp OptimisticLockCoupling/Tree.cpp)
 target_link_libraries(art_wrapper ARTSynchronized)
