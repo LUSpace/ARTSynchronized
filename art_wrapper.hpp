@@ -21,17 +21,12 @@ public:
   art_wrapper() { my_tree = new ART_OLC::Tree(loadKey); }
 
   void bulk_load(const V bulk_arr[], int num) {
-    std::cout << "start get thread info" << std::endl;
     auto t = my_tree->getThreadInfo();
     for (int i = 0; i < num; ++i) {
-      std::cout << "insert " << i << "key: ";
-      printf("%s ------- with %d\n", bulk_arr[i].first->key,
-             bulk_arr[i].first->length);
       Key key_;
       key_.set(bulk_arr[i].first->key, bulk_arr[i].first->length);
       auto val =
           new std::pair<string_key *, P>(bulk_arr[i].first, bulk_arr[i].second);
-      std::cout << "ready to insert" << std::endl;
       my_tree->insert(key_, reinterpret_cast<TID>(val), t);
     }
   }
