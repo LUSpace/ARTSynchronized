@@ -8,20 +8,20 @@ else()
     message(STATUS "Build type is set to ${CMAKE_BUILD_TYPE}")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Wextra -march=native -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O3 -Wall -Wextra -march=native -g")
 
 find_library(JemallocLib jemalloc)
 find_library(TbbLib tbb)
 find_package (Threads)
 
-set(ART_FILES OptimisticLockCoupling/Tree.cpp ROWEX/Tree.cpp ART/Tree.cpp)
-add_library(ARTSynchronized ${ART_FILES})
-target_link_libraries(ARTSynchronized ${TbbLib} ${JemallocLib} ${CMAKE_THREAD_LIBS_INIT})
+#set(ART_FILES OptimisticLockCoupling/Tree.cpp ROWEX/Tree.cpp ART/Tree.cpp)
+#add_library(ARTSynchronized ${ART_FILES})
+#target_link_libraries(ARTSynchronized ${TbbLib} ${JemallocLib} ${CMAKE_THREAD_LIBS_INIT})
 
 
-set(SOURCE_FILES example.cpp)
-add_executable(example ${SOURCE_FILES})
-target_link_libraries(example ARTSynchronized)
+#set(SOURCE_FILES example.cpp)
+#add_executable(example ${SOURCE_FILES})
+#target_link_libraries(example ARTSynchronized)
 
 add_library(art_wrapper SHARED art_wrapper.cpp OptimisticLockCoupling/Tree.cpp Epoche.cpp)
-#target_link_libraries(art_wrapper ARTSynchronized)
+target_link_libraries(art_wrapper ${TbbLib} ${JemallocLib} ${CMAKE_THREAD_LIBS_INIT)
