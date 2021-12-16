@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 
+/*
 void loadKey(TID tid, Key &key) {
   // Store the key of the tuple into the key vector
   // Implementation is database specific
@@ -13,6 +14,7 @@ void loadKey(TID tid, Key &key) {
   auto sk = tuple->first;
   key.set(sk->key, sk->length);
 }
+*/
 
 // used to define the interface of all benchmarking trees
 template <class T, class P> class art_wrapper : public Tree<T, P> {
