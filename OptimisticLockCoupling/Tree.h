@@ -37,20 +37,22 @@ public:
     Bigger,
   };
   enum class PCEqualsResults : uint8_t { BothMatch, Contained, NoMatch };
-  CheckPrefixResult checkPrefix(N *n, const Key &k, uint32_t &level);
+  static CheckPrefixResult checkPrefix(N *n, const Key &k, uint32_t &level);
 
-  CheckPrefixPessimisticResult
+  static CheckPrefixPessimisticResult
   checkPrefixPessimistic(N *n, const Key &k, uint32_t &level,
                          uint8_t &nonMatchingKey, Prefix &nonMatchingPrefix,
                          LoadKeyFunction loadKey, bool &needRestart);
 
-  PCCompareResults checkPrefixCompare(const N *n, const Key &k, uint8_t fillKey,
-                                      uint32_t &level, LoadKeyFunction loadKey,
-                                      bool &needRestart);
+  static PCCompareResults checkPrefixCompare(const N *n, const Key &k,
+                                             uint8_t fillKey, uint32_t &level,
+                                             LoadKeyFunction loadKey,
+                                             bool &needRestart);
 
-  PCEqualsResults checkPrefixEquals(const N *n, uint32_t &level,
-                                    const Key &start, const Key &end,
-                                    LoadKeyFunction loadKey, bool &needRestart);
+  static PCEqualsResults checkPrefixEquals(const N *n, uint32_t &level,
+                                           const Key &start, const Key &end,
+                                           LoadKeyFunction loadKey,
+                                           bool &needRestart);
 
 public:
   Tree(LoadKeyFunction loadKey);
