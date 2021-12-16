@@ -23,5 +23,5 @@ find_package (Threads)
 #add_executable(example ${SOURCE_FILES})
 #target_link_libraries(example ARTSynchronized)
 
-add_library(art_wrapper SHARED art_wrapper.cpp OptimisticLockCoupling/Tree.cpp Epoche.cpp)
+add_library(art_wrapper SHARED art_wrapper.cpp OptimisticLockCoupling/Tree.cpp)
 target_link_libraries(art_wrapper ${TbbLib} ${JemallocLib} ${CMAKE_THREAD_LIBS_INIT})

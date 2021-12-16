@@ -1,6 +1,7 @@
 #pragma once
-#include "OptimisticLockCoupling/Tree.h"
 #include "tree.h"
+
+#include "OptimisticLockCoupling/Tree.h"
 #include <iostream>
 #include <map>
 
