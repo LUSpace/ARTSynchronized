@@ -19,9 +19,11 @@ template <class T, class P> class art_wrapper : public Tree<T, P> {
 public:
   typedef std::pair<T, P> V;
 
-  art_wrapper() { my_tree = new ART_OLC::Tree(loadKey); }
+  art_wrapper() { // my_tree = new ART_OLC::Tree(loadKey);
+  }
 
   void bulk_load(const V bulk_arr[], int num) {
+    /*
     auto t = my_tree->getThreadInfo();
     for (int i = 0; i < num; ++i) {
       Key key_;
@@ -30,9 +32,11 @@ public:
           new std::pair<string_key *, P>(bulk_arr[i].first, bulk_arr[i].second);
       my_tree->insert(key_, reinterpret_cast<TID>(val), t);
     }
+    */
   }
 
   bool insert(const T &key, const P &payload) {
+    /*
     auto t = my_tree->getThreadInfo();
     if constexpr (std::is_pointer_v<T>) {
       Key key_;
@@ -45,9 +49,11 @@ public:
       std::cout << "The key must be string key in HOT!" << std::endl;
       exit(-1);
     }
+    */
   }
 
   bool search(const T &key, P *payload) const {
+    /*
     auto t = my_tree->getThreadInfo();
     if constexpr (std::is_pointer_v<T>) {
       Key key_;
@@ -65,6 +71,7 @@ public:
       std::cout << "The key must be string key in HOT!" << std::endl;
       exit(-1);
     }
+    */
   }
 
   // 0 means no erase, 1 means erase 1
@@ -81,5 +88,6 @@ public:
   }
 
 private:
-  ART_OLC::Tree *my_tree; // Store the pointer to the tree instance
+  // ART_OLC::Tree *my_tree; // Store the pointer to the tree instance
+  int a;
 };
