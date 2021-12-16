@@ -24,4 +24,4 @@ target_link_libraries(ARTSynchronized ${TbbLib} ${JemallocLib} ${CMAKE_THREAD_LI
 #target_link_libraries(example ARTSynchronized)
 
 add_library(art_wrapper SHARED art_wrapper.cpp)
-target_link_libraries(art_wrapper ARTSynchronized)
+#target_link_libraries(art_wrapper ARTSynchronized)
