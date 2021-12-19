@@ -26,10 +26,9 @@ private:
 void loadKey(TID tid, Key &key) {
   // Store the key of the tuple into the key vector
   // Implementation is database specific
-  auto tuple = reinterpret_cast<std::pair<const char *, char *> *>(
+  auto tuple = reinterpret_cast<std::pair<const char *, uint64_t> *>(
       tid & ((1UL << 63) - 1));
-  auto sk = tuple->first;
-  key.set(sk->key, sk->length);
+  key.set(tuple->first, tuple->second);
 }
 
 art_wrapper::art_wrapper() { my_tree = new ART_OLC::Tree(loadKey); }
