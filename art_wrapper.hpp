@@ -1,11 +1,28 @@
 #pragma once
-#include "tree.h"
+#include "tree_api.h"
 
-//#include "OptimisticLockCoupling/Tree.h"
+#include "OptimisticLockCoupling/Tree.h"
 #include <iostream>
 #include <map>
 
-/*
+class art_wrapper : public tree_api {
+public:
+  art_wrapper();
+  virtual ~art_wrapper();
+
+  virtual bool find(const char *key, size_t key_sz, char *value_out) override;
+  virtual bool insert(const char *key, size_t key_sz, const char *value,
+                      size_t value_sz) override;
+  virtual bool update(const char *key, size_t key_sz, const char *value,
+                      size_t value_sz) override;
+  virtual bool remove(const char *key, size_t key_sz) override;
+  virtual int scan(const char *key, size_t key_sz, int scan_sz,
+                   char *&values_out) override;
+
+private:
+  ART_OLC::Tree *my_tree;
+};
+
 void loadKey(TID tid, Key &key) {
   // Store the key of the tuple into the key vector
   // Implementation is database specific
@@ -14,82 +31,41 @@ void loadKey(TID tid, Key &key) {
   auto sk = tuple->first;
   key.set(sk->key, sk->length);
 }
-*/
 
-// used to define the interface of all benchmarking trees
-template <class T, class P> class art_wrapper : public Tree<T, P> {
-public:
-  typedef std::pair<T, P> V;
+art_wrapper::art_wrapper() { my_tree = new ART_OLC::Tree(loadKey); }
 
-  art_wrapper() { // my_tree = new ART_OLC::Tree(loadKey);
+art_wrapper::~art_wrapper() {}
+
+bool art_wrapper::insert(const char *key, size_t key_sz, const char *value,
+                         size_t value_sz) {
+  auto t = my_tree->getThreadInfo();
+  Key key_;
+  key_.set(key, key_sz);
+  auto val = new std::pair<string_key *, uint64_t>(key, key_sz);
+  my_tree->insert(key_, reinterpret_cast<TID>(val), t);
+  return true;
+}
+
+bool art_wrapper::find(const char *key, size_t key_sz, char *value_out) {
+  auto t = my_tree->getThreadInfo();
+  Key key_;
+  key_.set(key, key_sz);
+  auto val = my_tree->lookup(key_, t);
+  if (val == 0) {
+    return false;
   }
+  *value_out = reinterpret_cast<TID>(val);
+  return true;
+}
 
-  void bulk_load(const V bulk_arr[], int num) {
-    /*
-    auto t = my_tree->getThreadInfo();
-    for (int i = 0; i < num; ++i) {
-      Key key_;
-      key_.set(bulk_arr[i].first->key, bulk_arr[i].first->length);
-      auto val =
-          new std::pair<string_key *, P>(bulk_arr[i].first, bulk_arr[i].second);
-      my_tree->insert(key_, reinterpret_cast<TID>(val), t);
-    }
-    */
-  }
+bool art_wrapper::update(const char *key, size_t key_sz, const char *value,
+                         size_t value_sz) {
+  return true;
+}
 
-  bool insert(const T &key, const P &payload) {
-    /*
-    auto t = my_tree->getThreadInfo();
-    if constexpr (std::is_pointer_v<T>) {
-      Key key_;
-      key_.set(key->key, key->length);
-      auto val = new std::pair<string_key *, P>(key, payload);
-      my_tree->insert(key_, reinterpret_cast<TID>(val), t);
-      return true;
-    } else {
-      // LOG_FATAL("The key must be string key in HOT!");
-      std::cout << "The key must be string key in HOT!" << std::endl;
-      exit(-1);
-    }
-    */
-  }
+bool art_wrapper::remove(const char *key, size_t key_sz) { return true; }
 
-  bool search(const T &key, P *payload) const {
-    /*
-    auto t = my_tree->getThreadInfo();
-    if constexpr (std::is_pointer_v<T>) {
-      Key key_;
-      key_.set(key->key, key->length);
-      auto val = my_tree->lookup(key_, t);
-      if (val == 0) {
-        return false;
-      }
-      auto tuple = reinterpret_cast<std::pair<string_key *, char *> *>(
-          val & ((1UL << 63) - 1));
-      *payload = tuple->second;
-      return true;
-    } else {
-      // LOG_FATAL("The key must be string key in HOT!");
-      std::cout << "The key must be string key in HOT!" << std::endl;
-      exit(-1);
-    }
-    */
-  }
-
-  // 0 means no erase, 1 means erase 1
-  bool erase(const T &key) { return false; }
-
-  bool update(const T &key, const P &payload) { return false; }
-
-  void print_min_max() {}
-
-  void get_depth_info() {}
-
-  int range_scan_by_size(const T &key, uint32_t to_scan, V *&result = nullptr) {
-    return 0;
-  }
-
-private:
-  // ART_OLC::Tree *my_tree; // Store the pointer to the tree instance
-  int a;
-};
+int art_wrapper::scan(const char *key, size_t key_sz, int scan_sz,
+                      char *&values_out) {
+  return 0;
+}
