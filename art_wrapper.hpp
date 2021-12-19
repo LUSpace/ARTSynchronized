@@ -26,7 +26,7 @@ private:
 void loadKey(TID tid, Key &key) {
   // Store the key of the tuple into the key vector
   // Implementation is database specific
-  auto tuple = reinterpret_cast<std::pair<string_key *, char *> *>(
+  auto tuple = reinterpret_cast<std::pair<const char *, char *> *>(
       tid & ((1UL << 63) - 1));
   auto sk = tuple->first;
   key.set(sk->key, sk->length);
@@ -41,7 +41,7 @@ bool art_wrapper::insert(const char *key, size_t key_sz, const char *value,
   auto t = my_tree->getThreadInfo();
   Key key_;
   key_.set(key, key_sz);
-  auto val = new std::pair<string_key *, uint64_t>(key, key_sz);
+  auto val = new std::pair<const char *, uint64_t>(key, key_sz);
   my_tree->insert(key_, reinterpret_cast<TID>(val), t);
   return true;
 }
